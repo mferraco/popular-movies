@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by mferraco on 4/1/16.
@@ -28,6 +29,8 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
     private static final String TAG = GetMoviesTask.class.getSimpleName();
 
     private Context mContext;
+
+    public AsyncGetMoviesResponse delegate;
 
     public GetMoviesTask (Context context){
         mContext = context;
@@ -106,18 +109,24 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
     protected void onPostExecute(JSONObject result) {
         super.onPostExecute(result);
 
-        Log.d(TAG, "GOT MOVIE!!");
+        // populate data into ImageAdapter
+
+        ArrayList<Movie> movies = new ArrayList<>();
 
         JSONArray arrayOfMovies = result.optJSONArray("results");
 
         for (int i = 0; i < arrayOfMovies.length(); i++) {
             try {
                 Movie newMovie = Movie.fromJson(arrayOfMovies.getJSONObject(i));
-                Log.d(TAG, newMovie.getTitle());
-                Log.d(TAG, newMovie.getOverview());
+                movies.add(newMovie);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        if (delegate != null) {
+            // send the data back to the delegate for processing
+            delegate.processFinish(movies);
         }
     }
 }
