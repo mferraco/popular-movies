@@ -58,7 +58,7 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 // Nothing to do.
                 return null;
@@ -67,7 +67,7 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {
