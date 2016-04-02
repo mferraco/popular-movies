@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.example.mferraco.popularmovies.R;
 import com.example.mferraco.popularmovies.responseModels.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -19,6 +19,10 @@ import java.util.List;
  */
 
 public class ImageAdapter extends ArrayAdapter<Movie> {
+
+    private static final String imageBaseUrl = "http://image.tmdb.org/t/p/";
+
+    private static final String imageSize = "w185";
 
     private Context mContext;
 
@@ -52,15 +56,16 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
         if (convertView == null) { // if this IS NOT a recycled view
             imageView = new ImageView(mContext);
 
-            imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(0, 0, 0, 0);
-
+            imageView.setAdjustViewBounds(true);
         } else { // if this IS a recycled view
             imageView = (ImageView) convertView;
         }
 
-        //imageView.setImageResource(mMovies.get(position).getPosterPath());
+        String posterPath = mMovies.get(position).getPosterPath();
+
+        Picasso.with(mContext).load(imageBaseUrl + imageSize + posterPath).into(imageView);
+
         return imageView;
     }
 }
