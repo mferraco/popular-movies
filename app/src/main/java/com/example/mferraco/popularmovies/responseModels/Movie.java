@@ -81,6 +81,17 @@ public class Movie {
         return movie;
     }
 
+    public static Movie fromString(String movieDataString) {
+        try {
+            return Movie.fromJson(new JSONObject(movieDataString));
+        } catch (JSONException e) {
+            Log.d(TAG, "Error: " + e);
+            e.printStackTrace();
+        }
+
+        return new Movie();
+    }
+
     public String getPosterPath() {
         return posterPath;
     }
