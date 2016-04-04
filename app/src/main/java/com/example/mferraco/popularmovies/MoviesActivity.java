@@ -22,6 +22,7 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
 
     private static final String TAG = MoviesActivity.class.getSimpleName();
 
+    // Keys for storing instance state
     private static final String CURRENT_SORT_ORDER_KEY = "mCurrentSortOrder";
     private static final String FIRST_REQUEST_KEY = "mFirstRequest";
 
@@ -38,6 +39,7 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
 
         if (savedInstanceState != null) {
             mCurrentSortOrder = savedInstanceState.getString(CURRENT_SORT_ORDER_KEY, getString(R.string.settings_sort_order_default));
+            mFirstRequest = savedInstanceState.getBoolean(FIRST_REQUEST_KEY, true);
         } else {
             mCurrentSortOrder = getString(R.string.settings_sort_order_default);
         }
@@ -100,5 +102,6 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
+        outState.putBoolean(FIRST_REQUEST_KEY, mFirstRequest);
     }
 }

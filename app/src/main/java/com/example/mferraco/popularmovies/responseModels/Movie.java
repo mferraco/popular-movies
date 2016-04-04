@@ -1,5 +1,7 @@
 package com.example.mferraco.popularmovies.responseModels;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
  * <p/>
  * This object represents a movie json object in the response from TheMovieDB API.
  */
-public class Movie {
+public class Movie implements Parcelable {
 
     private static final String TAG = Movie.class.getSimpleName();
 
@@ -45,6 +47,9 @@ public class Movie {
 
     private double voteAverage;
 
+    public Movie() {
+    }
+
     public static Movie fromJson(JSONObject movieDataJson) {
         Movie movie = new Movie();
 
@@ -65,17 +70,17 @@ public class Movie {
         // add genre ids from list
         ArrayList<Integer> genreIds = new ArrayList<>();
         JSONArray genreIdsJsonArray = movieDataJson.optJSONArray("genre_ids");
-        if (genreIdsJsonArray != null) {
-            for (int i = 0; i < genreIdsJsonArray.length(); i++) {
-                try {
-                    genreIds.add(genreIdsJsonArray.getInt(i));
-                } catch (JSONException e) {
-                    Log.e(TAG, "Error: " + e);
-                    e.printStackTrace();
-                }
 
+        for (int i = 0; i < genreIdsJsonArray.length(); i++) {
+            try {
+                genreIds.add(genreIdsJsonArray.getInt(i));
+            } catch (JSONException e) {
+                Log.e(TAG, "Error: " + e);
+                e.printStackTrace();
             }
+
         }
+
         movie.setGenreIds(genreIds);
 
         return movie;
@@ -203,4 +208,61 @@ public class Movie {
     public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
+
+
+    /* Parcelable Interface */
+
+    public Movie(Parcel in) {
+        this.posterPath = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        this.releaseDate = in.readString();
+        this.genreIds = new ArrayList<>();
+        in.readList(genreIds, Integer.class.getClassLoader());
+        this.id = in.readInt();
+        this.originalTitle = in.readString();
+        this.originalLanguage = in.readString();
+        this.title = in.readString();
+        this.backdropPath = in.readString();
+        this.popularity = in.readDouble();
+        this.voteCount = in.readInt();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readDouble();
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(posterPath);
+        dest.writeByte((byte) (adult ? 1 : 0));
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeList(genreIds);
+        dest.writeInt(id);
+        dest.writeString(originalTitle);
+        dest.writeString(originalLanguage);
+        dest.writeString(title);
+        dest.writeString(backdropPath);
+        dest.writeDouble(popularity);
+        dest.writeInt(voteCount);
+        dest.writeByte((byte) (video ? 1 : 0));
+        dest.writeDouble(voteAverage);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
 }

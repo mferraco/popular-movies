@@ -1,11 +1,13 @@
 package com.example.mferraco.popularmovies.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.example.mferraco.popularmovies.MovieDetailsActivity;
 import com.example.mferraco.popularmovies.R;
 import com.example.mferraco.popularmovies.responseModels.Movie;
 import com.squareup.picasso.Picasso;
@@ -20,9 +22,11 @@ import java.util.List;
 
 public class ImageAdapter extends ArrayAdapter<Movie> {
 
+    // image URL constants
     private static final String imageBaseUrl = "http://image.tmdb.org/t/p/";
-
     private static final String imageSize = "w185";
+
+    public static final String MOVIE_OBJECT_KEY = "movieObjectKey";
 
     private Context mContext;
 
@@ -50,7 +54,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ImageView imageView;
 
         if (convertView == null) { // if this IS NOT a recycled view
@@ -65,6 +69,15 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
         String posterPath = mMovies.get(position).getPosterPath();
 
         Picasso.with(mContext).load(imageBaseUrl + imageSize + posterPath).into(imageView);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent movieDetailsIntent = new Intent(mContext, MovieDetailsActivity.class);
+                movieDetailsIntent.putExtra(MOVIE_OBJECT_KEY, mMovies.get(position));
+                mContext.startActivity(movieDetailsIntent);
+            }
+        });
 
         return imageView;
     }
