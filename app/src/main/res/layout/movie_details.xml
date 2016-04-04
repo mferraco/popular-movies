@@ -5,19 +5,22 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/movie_details_small_padding"
-        android:paddingRight="@dimen/movie_details_small_padding"
-        android:paddingTop="@dimen/movie_details_padding_large_padding"
-        android:paddingBottom="@dimen/movie_details_padding_large_padding">
+        android:paddingBottom="@dimen/movie_details_padding_large_padding" >
 
         <TextView
             android:id="@+id/movie_title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="@dimen/movie_details_title_size" />
+            android:textSize="@dimen/movie_details_title_size"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:paddingLeft="@dimen/movie_details_small_padding"
+            android:paddingRight="@dimen/movie_details_small_padding"
+            android:paddingTop="@dimen/movie_details_padding_large_padding"
+            android:paddingBottom="@dimen/movie_details_padding_large_padding"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,13 +78,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/movie_details_field_heading_size"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingLeft="@dimen/movie_details_small_padding"
+            android:paddingRight="@dimen/movie_details_small_padding" />
 
         <TextView
             android:id="@+id/overview_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/movie_details_field_value_size" />
+            android:textSize="@dimen/movie_details_field_value_size"
+            android:paddingLeft="@dimen/movie_details_small_padding"
+            android:paddingRight="@dimen/movie_details_small_padding" />
 
     </LinearLayout>
 
