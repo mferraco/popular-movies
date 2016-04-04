@@ -5,6 +5,14 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_movie_details">Movie Details</string>
 
+    <!-- Movie Details Activity -->
+
+    <string-array name="movie_details_fields_title">
+        <item>Release Date</item>
+        <item>Vote Average</item>
+        <item>Overview</item>
+    </string-array>
+
     <!-- Menu Item Titles -->
     <string name="action_settings">Settings</string>
 
@@ -23,5 +31,10 @@
         <item>popular</item>
         <item>top_rated</item>
     </string-array>
+
+    <!-- Image Constants -->
+    <string name="image_base_path">http://image.tmdb.org/t/p/</string>
+    <string name="image_size_w185">w185</string>
+    <string name="image_size_w342">w342</string>
 
 </resources>

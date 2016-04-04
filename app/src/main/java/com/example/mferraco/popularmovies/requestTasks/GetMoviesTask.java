@@ -127,6 +127,7 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
         if (delegate != null) {
             // send the data back to the delegate for processing
             delegate.processFinish(movies);
+
         }
     }
 }

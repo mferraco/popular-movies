@@ -22,10 +22,6 @@ import java.util.List;
 
 public class ImageAdapter extends ArrayAdapter<Movie> {
 
-    // image URL constants
-    private static final String imageBaseUrl = "http://image.tmdb.org/t/p/";
-    private static final String imageSize = "w185";
-
     public static final String MOVIE_OBJECT_KEY = "movieObjectKey";
 
     private Context mContext;
@@ -66,9 +62,11 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
             imageView = (ImageView) convertView;
         }
 
+        String basePath = mContext.getString(R.string.image_base_path);
+        String size = mContext.getString(R.string.image_size_w185);
         String posterPath = mMovies.get(position).getPosterPath();
 
-        Picasso.with(mContext).load(imageBaseUrl + imageSize + posterPath).into(imageView);
+        Picasso.with(mContext).load(basePath + size + posterPath).into(imageView);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
