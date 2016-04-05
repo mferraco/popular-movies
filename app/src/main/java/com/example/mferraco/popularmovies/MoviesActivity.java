@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.Toast;
 
+import com.example.mferraco.popularmovies.Utils.AppUtils;
 import com.example.mferraco.popularmovies.adapters.ImageAdapter;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetMoviesResponse;
 import com.example.mferraco.popularmovies.requestTasks.GetMoviesTask;
@@ -64,9 +66,14 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
             mFirstRequest = false;
             mCurrentSortOrder = sortOrderPreference;
 
-            GetMoviesTask getMoviesTask = new GetMoviesTask(this);
-            getMoviesTask.delegate = this;
-            getMoviesTask.execute(mCurrentSortOrder);
+            if (AppUtils.isOnline(this)) {
+                GetMoviesTask getMoviesTask = new GetMoviesTask(this);
+                getMoviesTask.delegate = this;
+                getMoviesTask.execute(mCurrentSortOrder);
+            } else {
+                Toast.makeText(this, getString(R.string.no_network_dialog_title), Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 
