@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
@@ -27,12 +27,15 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
     // Keys for storing instance state
     private static final String CURRENT_SORT_ORDER_KEY = "mCurrentSortOrder";
     private static final String FIRST_REQUEST_KEY = "mFirstRequest";
+    private static final String MOVIES_KEY = "mMovies";
 
     private GridView mImageGridView;
 
     private String mCurrentSortOrder;
 
     private boolean mFirstRequest = true;
+
+    private ArrayList<Movie> mMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
         if (savedInstanceState != null) {
             mCurrentSortOrder = savedInstanceState.getString(CURRENT_SORT_ORDER_KEY, getString(R.string.settings_sort_order_default));
             mFirstRequest = savedInstanceState.getBoolean(FIRST_REQUEST_KEY, true);
+            mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
         } else {
             mCurrentSortOrder = getString(R.string.settings_sort_order_default);
         }
@@ -67,13 +71,17 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
             mCurrentSortOrder = sortOrderPreference;
 
             if (AppUtils.isOnline(this)) {
-                GetMoviesTask getMoviesTask = new GetMoviesTask(this);
-                getMoviesTask.delegate = this;
-                getMoviesTask.execute(mCurrentSortOrder);
+                    GetMoviesTask getMoviesTask = new GetMoviesTask(this);
+                    getMoviesTask.delegate = this;
+                    Log.d(TAG, "EXECUTING API REQUEST");
+                    getMoviesTask.execute(mCurrentSortOrder);
             } else {
                 Toast.makeText(this, getString(R.string.no_network_dialog_title), Toast.LENGTH_LONG).show();
             }
-
+        } else {
+            if (mMovies != null) {
+                processFinish(mMovies);
+            }
         }
     }
 
@@ -102,13 +110,16 @@ public class MoviesActivity extends AppCompatActivity implements AsyncGetMoviesR
 
     @Override
     public void processFinish(ArrayList<Movie> movies) {
+        mMovies = movies;
+
         // set up image adapter here
         mImageGridView.setAdapter(new ImageAdapter(this, movies));
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
         outState.putBoolean(FIRST_REQUEST_KEY, mFirstRequest);
+        outState.putParcelableArrayList(MOVIES_KEY, mMovies);
     }
 }
