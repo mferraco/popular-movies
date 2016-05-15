@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.mferraco.popularmovies.R;
-import com.example.mferraco.popularmovies.responseModels.Movie;
+import com.example.mferraco.popularmovies.responseModels.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,22 +20,22 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * This task fetches movie data from the API sorted by the sort parameter provided to it
+ * This task fetches movie reviews from the API based on the movie id provided to it
  */
-public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
+public class GetReviewsTask extends AsyncTask<Integer, Integer, JSONObject> {
 
-    private static final String TAG = GetMoviesTask.class.getSimpleName();
+    private static final String TAG = GetReviewsTask.class.getSimpleName();
 
     private Context mContext;
 
-    public AsyncGetMoviesResponse delegate;
+    public AsyncGetReviewsResponse delegate;
 
-    public GetMoviesTask (Context context){
+    public GetReviewsTask (Context context){
         mContext = context;
     }
 
     @Override
-    protected JSONObject doInBackground(String... params) {
+    protected JSONObject doInBackground(Integer... params) {
 
         // if there's no parameters just return null, we need a the search type here
         if (params.length == 0) {
@@ -47,10 +47,10 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
 
         try {
             String baseUri = "https://api.themoviedb.org/3/movie/";
-            String filterType = params[0];
+            Integer movieId = params[0];
             String apiKey = mContext.getString(R.string.movie_api_key);
 
-            URL url = new URL(baseUri + filterType + "?api_key=" + apiKey);
+            URL url = new URL(baseUri + movieId + "/reviews?api_key=" + apiKey);
 
             // Create the request to TheMovieDB, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -107,16 +107,14 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
     protected void onPostExecute(JSONObject result) {
         super.onPostExecute(result);
 
-        // populate data into ImageAdapter
+        ArrayList<Review> reviews = new ArrayList<>();
 
-        ArrayList<Movie> movies = new ArrayList<>();
+        JSONArray arrayOfReviews = result.optJSONArray("results");
 
-        JSONArray arrayOfMovies = result.optJSONArray("results");
-
-        for (int i = 0; i < arrayOfMovies.length(); i++) {
+        for (int i = 0; i < arrayOfReviews.length(); i++) {
             try {
-                Movie newMovie = Movie.fromJson(arrayOfMovies.getJSONObject(i));
-                movies.add(newMovie);
+                Review newReview = Review.fromJson(arrayOfReviews.getJSONObject(i));
+                reviews.add(newReview);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -124,7 +122,7 @@ public class GetMoviesTask extends AsyncTask<String, Integer, JSONObject> {
 
         if (delegate != null) {
             // send the data back to the delegate for processing
-            delegate.processMovieResponse(movies);
+            delegate.processReviewsResponse(reviews);
         }
     }
 }

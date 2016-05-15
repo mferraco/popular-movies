@@ -5,10 +5,14 @@ import com.example.mferraco.popularmovies.responseModels.Movie;
 import java.util.ArrayList;
 
 /**
- * Created by mferraco on 4/2/16.
- *
- * This is an interface that the class that wants to retrieve the data must implement
+ * Any class that wishes to retrieve movies from the API must implement this interface
  */
 public interface AsyncGetMoviesResponse {
-    void processFinish(ArrayList<Movie> movies);
+
+    /**
+     * Contains any actions that must take place based on the response from the API
+     *
+     * @param movies the response of movies from the API
+     */
+    void processMovieResponse(ArrayList<Movie> movies);
 }

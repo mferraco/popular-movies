@@ -40,7 +40,4 @@
     <string name="image_size_w185">w185</string>
     <string name="image_size_w342">w342</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

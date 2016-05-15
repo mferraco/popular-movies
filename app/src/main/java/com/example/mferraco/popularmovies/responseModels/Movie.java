@@ -11,8 +11,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by mferraco on 4/1/16
- * <p/>
  * This object represents a movie json object in the response from TheMovieDB API.
  */
 public class Movie implements Parcelable {
@@ -20,34 +18,22 @@ public class Movie implements Parcelable {
     private static final String TAG = Movie.class.getSimpleName();
 
     private String posterPath;
-
     private boolean adult;
-
     private String overview;
-
     private String releaseDate;
-
     private ArrayList<Integer> genreIds;
-
     private int id;
-
     private String originalTitle;
-
     private String originalLanguage;
-
     private String title;
-
     private String backdropPath;
-
     private double popularity;
-
     private int voteCount;
-
     private boolean video;
-
     private double voteAverage;
 
     public Movie() {
+        // No-op
     }
 
     public static Movie fromJson(JSONObject movieDataJson) {

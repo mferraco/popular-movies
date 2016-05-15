@@ -109,7 +109,7 @@ public class    MoviesFragment extends android.support.v4.app.Fragment implement
             }
         } else {
             if (mMovies != null) {
-                processFinish(mMovies);
+                processMovieResponse(mMovies);
             }
         }
     }
@@ -117,7 +117,7 @@ public class    MoviesFragment extends android.support.v4.app.Fragment implement
     /* AsyncGetMoviesResponse Interface */
 
     @Override
-    public void processFinish(ArrayList<Movie> movies) {
+    public void processMovieResponse(ArrayList<Movie> movies) {
         mMovies = movies;
 
         // set up image adapter here
