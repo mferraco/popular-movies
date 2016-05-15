@@ -1,13 +1,11 @@
 package com.example.mferraco.popularmovies.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.example.mferraco.popularmovies.MovieDetailsActivity;
 import com.example.mferraco.popularmovies.R;
 import com.example.mferraco.popularmovies.responseModels.Movie;
 import com.squareup.picasso.Picasso;
@@ -15,14 +13,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by mferraco on 4/2/16.
- * <p/>
  * This is the custom adapter class which populates the grid view with movie images
  */
 
 public class ImageAdapter extends ArrayAdapter<Movie> {
-
-    public static final String MOVIE_OBJECT_KEY = "movieObjectKey";
 
     private Context mContext;
 
@@ -67,15 +61,6 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
         String posterPath = mMovies.get(position).getPosterPath();
 
         Picasso.with(mContext).load(basePath + size + posterPath).into(imageView);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent movieDetailsIntent = new Intent(mContext, MovieDetailsActivity.class);
-                movieDetailsIntent.putExtra(MOVIE_OBJECT_KEY, mMovies.get(position));
-                mContext.startActivity(movieDetailsIntent);
-            }
-        });
 
         return imageView;
     }

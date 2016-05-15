@@ -1,4 +1,4 @@
-package com.example.mferraco.popularmovies.Utils;
+package com.example.mferraco.popularmovies.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
