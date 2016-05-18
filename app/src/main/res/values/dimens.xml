@@ -23,4 +23,5 @@
     <dimen name="movie_details_list_view_height">100dp</dimen>
 
     <dimen name="trailer_title_text_size">20sp</dimen>
+    <dimen name="review_text_size">14sp</dimen>
 </resources>
