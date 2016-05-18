@@ -2,6 +2,7 @@ package com.example.mferraco.popularmovies;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +28,12 @@ import java.util.ArrayList;
 
 /**
  * This Fragment displays the details for a particular movie.  These details could be on their
- * own screen (on smaller devices) or on half of the screen snext to the list of movies (on larger
+ * own screen (on smaller devices) or on half of the screen sext to the list of movies (on larger
  * devices such as tablets).
  */
-public class MovieDetailsFragment extends android.support.v4.app.Fragment implements AsyncGetTrailersResponse, AsyncGetReviewsResponse {
+public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersResponse, AsyncGetReviewsResponse {
 
-    private static String TAG = MovieDetailsFragment.class.getSimpleName();
+    private static final String TAG = MovieDetailsFragment.class.getSimpleName();
 
     private Movie mMovie;
 

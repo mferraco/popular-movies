@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * Created by mferraco on 4/2/16.
- *
  * This activity displays the details for a Movie
  */
 public class MovieDetailsActivity extends AppCompatActivity {
