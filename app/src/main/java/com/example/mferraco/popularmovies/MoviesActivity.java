@@ -7,8 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.mferraco.popularmovies.interfaces.DetailsCallback;
+import com.example.mferraco.popularmovies.interfaces.ReviewDetailsCallback;
+import com.example.mferraco.popularmovies.responseModels.Movie;
+import com.example.mferraco.popularmovies.responseModels.Review;
 
-public class MoviesActivity extends AppCompatActivity implements DetailsCallback {
+public class MoviesActivity extends AppCompatActivity implements DetailsCallback, ReviewDetailsCallback {
 
     private static final String TAG = MoviesActivity.class.getSimpleName();
 
@@ -64,7 +67,7 @@ public class MoviesActivity extends AppCompatActivity implements DetailsCallback
     }
 
     @Override
-    public void onItemSelected(com.example.mferraco.popularmovies.responseModels.Movie movie) {
+    public void onItemSelected(Movie movie) {
         if (isTabletLayout) {
             // load the movie data into the fragment on this screen
             Bundle args = new Bundle();
@@ -80,6 +83,20 @@ public class MoviesActivity extends AppCompatActivity implements DetailsCallback
             Intent movieDetailsIntent = new Intent(this, MovieDetailsActivity.class);
             movieDetailsIntent.putExtra(MOVIE_OBJECT_KEY, movie);
             this.startActivity(movieDetailsIntent);
+        }
+    }
+
+    @Override
+    public void onItemSelected(Review review) {
+        if (isTabletLayout) {
+            Bundle args = new Bundle();
+            args.putParcelable(ReviewDetailsFragment.REVIEW_OBJECT_KEY, review);
+
+            ReviewDetailsFragment fragment = ReviewDetailsFragment.newInstance(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
         }
     }
 }

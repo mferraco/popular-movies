@@ -1,17 +1,15 @@
 package com.example.mferraco.popularmovies.interfaces;
 
-
-import com.example.mferraco.popularmovies.responseModels.Movie;
+import com.example.mferraco.popularmovies.responseModels.Review;
 
 /**
  * A callback interface that all activities containing this fragment must
  * implement. This mechanism allows activities to be notified of item
  * selections.
  */
-public interface DetailsCallback {
+public interface ReviewDetailsCallback {
     /**
-     * DetailFragmentCallback for when an item has been selected.
+     * Review details callback for when a review item has been selected.
      */
-    void onItemSelected(Movie movie);
+    void onItemSelected(Review review);
 }
-
