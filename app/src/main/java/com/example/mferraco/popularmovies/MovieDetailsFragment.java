@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mferraco.popularmovies.adapters.TrailerListAdapter;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetReviewsResponse;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetTrailersResponse;
 import com.example.mferraco.popularmovies.requestTasks.GetReviewsTask;
@@ -36,6 +38,7 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
     // UI Elements
     private TextView title;
     private ImageView thumbnail;
+    private LinearLayout trailersLayout;
 
     public static MovieDetailsFragment newInstance(Bundle args) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -81,13 +84,14 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
             overviewHeading.setText(fieldTitles[2]);
             TextView overviewValue = (TextView) rootView.findViewById(R.id.overview_text);
             overviewValue.setText(mMovie.getOverview());
+
+            trailersLayout = (LinearLayout) rootView.findViewById(R.id.movie_trailers);
+            // make the request for the trailers
+            makeTrailersRequest();
+
+            // make the request for the reviews
+            makeReviewsRequest();
         }
-
-        // make the request for the trailers
-        makeTrailersRequest();
-
-        // make the request for the reviews
-        makeReviewsRequest();
 
         return rootView;
     }
@@ -124,8 +128,13 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void processTrailersResponse(ArrayList<Trailer> trailers) {
-        // display the trailers here...
-        Log.d(TAG, String.valueOf(trailers.size()));
+        TrailerListAdapter trailerListAdapter = new TrailerListAdapter(getContext(), trailers);
+
+        // add the views from the adapter to the LinearLayout
+        for (int i=0; i<trailerListAdapter.getCount(); i++) {
+            View viewToAdd = trailerListAdapter.getView(i, null, null);
+            trailersLayout.addView(viewToAdd);
+        }
     }
 
     @Override

@@ -40,4 +40,9 @@
     <string name="image_size_w185">w185</string>
     <string name="image_size_w342">w342</string>
 
+
+    <!-- Content Desciptions -->
+
+    <string name="cd_trailer_icon">Play movie icon.</string>
+
 </resources>

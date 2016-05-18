@@ -17,4 +17,10 @@
     <dimen name="movie_details_title_size">25sp</dimen>
     <dimen name="movie_details_field_heading_size">20sp</dimen>
     <dimen name="movie_details_field_value_size">17sp</dimen>
+
+    <dimen name="movie_details_divider_padding">20dp</dimen>
+    <dimen name="movie_details_divider_height">3dp</dimen>
+    <dimen name="movie_details_list_view_height">100dp</dimen>
+
+    <dimen name="trailer_title_text_size">20sp</dimen>
 </resources>
