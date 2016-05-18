@@ -24,4 +24,8 @@
 
     <dimen name="trailer_title_text_size">20sp</dimen>
     <dimen name="review_text_size">14sp</dimen>
+
+    <!-- Review Details View -->
+    <dimen name="review_heading_padding">8dp</dimen>
+    <dimen name="review_content_text_size">16sp</dimen>
 </resources>
