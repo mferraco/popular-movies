@@ -90,15 +90,19 @@
             android:paddingLeft="@dimen/movie_details_small_padding"
             android:paddingRight="@dimen/movie_details_small_padding" />
 
-        <!-- create divider line here -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/movie_details_divider_height"
-            android:layout_margin="@dimen/movie_details_small_padding"
-            android:background="@color/colorPrimaryDark"/>
+        <include layout="@layout/divider_line" />
 
         <LinearLayout
             android:id="@+id/movie_trailers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/movie_details_small_padding"/>
+
+        <include layout="@layout/divider_line" />
+
+        <LinearLayout
+            android:id="@+id/movie_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

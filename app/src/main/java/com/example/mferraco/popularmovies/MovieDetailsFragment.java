@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mferraco.popularmovies.adapters.ReviewListAdapter;
 import com.example.mferraco.popularmovies.adapters.TrailerListAdapter;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetReviewsResponse;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetTrailersResponse;
@@ -39,6 +40,7 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
     private TextView title;
     private ImageView thumbnail;
     private LinearLayout trailersLayout;
+    private LinearLayout reviewsLayout;
 
     public static MovieDetailsFragment newInstance(Bundle args) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -89,6 +91,7 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
             // make the request for the trailers
             makeTrailersRequest();
 
+            reviewsLayout = (LinearLayout) rootView.findViewById(R.id.movie_reviews);
             // make the request for the reviews
             makeReviewsRequest();
         }
@@ -131,7 +134,7 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
         TrailerListAdapter trailerListAdapter = new TrailerListAdapter(getContext(), trailers);
 
         // add the views from the adapter to the LinearLayout
-        for (int i=0; i<trailerListAdapter.getCount(); i++) {
+        for (int i = 0; i < trailerListAdapter.getCount(); i++) {
             View viewToAdd = trailerListAdapter.getView(i, null, null);
             trailersLayout.addView(viewToAdd);
         }
@@ -139,7 +142,12 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void processReviewsResponse(ArrayList<Review> reviews) {
-        // display the reviews here...
-        Log.d(TAG, String.valueOf(reviews.size()));
+        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(getContext(), reviews);
+
+        // add the views from the adapter to the LinearLayout
+        for (int i = 0; i < reviewListAdapter.getCount(); i++) {
+            View viewToAdd = reviewListAdapter.getView(i, null, null);
+            reviewsLayout.addView(viewToAdd);
+        }
     }
 }

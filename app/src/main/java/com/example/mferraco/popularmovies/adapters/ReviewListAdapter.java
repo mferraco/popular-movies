@@ -2,8 +2,6 @@ package com.example.mferraco.popularmovies.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,65 +10,61 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mferraco.popularmovies.R;
-import com.example.mferraco.popularmovies.responseModels.Trailer;
+import com.example.mferraco.popularmovies.responseModels.Review;
 
 import java.util.List;
 
 /**
  * This is the custom adapter class which populates a linear layout on the movie details page with
- * with trailers
+ * with reviews.
  */
-public class TrailerListAdapter extends ArrayAdapter<Trailer> {
+public class ReviewListAdapter extends ArrayAdapter<Review> {
 
     private Context mContext;
 
-    private List<Trailer> mTrailers;
+    private List<Review> mReviews;
 
-    public TrailerListAdapter(Context context, List<Trailer> trailers) {
-        super(context, R.layout.fragment_movie_details, trailers);
+    public ReviewListAdapter(Context context, List<Review> reviews) {
+        super(context, R.layout.fragment_movie_details, reviews);
 
         mContext = context;
-        mTrailers = trailers;
+        mReviews = reviews;
     }
 
     @Override
     public int getCount() {
-        return mTrailers.size();
+        return mReviews.size();
     }
 
     @Override
-    public Trailer getItem(int position) {
-        return mTrailers.get(position);
+    public Review getItem(int position) {
+        return mReviews.get(position);
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-
+    public View getView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
         TrailerListItemViewHolder holder;
 
         if (listItem == null) { // not recycling a view
             LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
-            listItem = inflater.inflate(R.layout.trailer_list_item, parent, false);
+            listItem = inflater.inflate(R.layout.review_list_item, parent, false);
 
             holder = new TrailerListItemViewHolder();
-            holder.icon = (ImageView) listItem.findViewById(R.id.youtube_icon_imageview);
-            holder.title = (TextView) listItem.findViewById(R.id.trailer_title_textview);
+            holder.icon = (ImageView) listItem.findViewById(R.id.pencil_icon_imageview);
+            holder.review = (TextView) listItem.findViewById(R.id.review_textview);
             listItem.setTag(holder);
         } else { // recycling a view
             holder = (TrailerListItemViewHolder) listItem.getTag();
         }
 
         // set data on list item view holder
-        holder.title.setText(mTrailers.get(position).getName());
+        holder.review.setText(mReviews.get(position).getContent());
 
         listItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // open youtube intent here
-                Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=" + mTrailers.get(position).getKey()));
-                mContext.startActivity(intent);
+                // open a new page with the full review after tapping here
             }
         });
 
@@ -78,10 +72,10 @@ public class TrailerListAdapter extends ArrayAdapter<Trailer> {
     }
 
     /**
-     * A ViewHolder for the list items in the list of trailers
+     * A ViewHolder for the list items in the list of reviews
      */
     static class TrailerListItemViewHolder {
         ImageView icon;
-        TextView title;
+        TextView review;
     }
 }

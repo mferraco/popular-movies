@@ -42,7 +42,7 @@
 
 
     <!-- Content Desciptions -->
-
     <string name="cd_trailer_icon">Play movie icon.</string>
+    <string name="cd_pencil_icon">Read review icon.</string>
 
 </resources>
