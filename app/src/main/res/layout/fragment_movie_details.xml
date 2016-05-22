@@ -7,34 +7,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/movie_details_padding_large_padding" >
+        android:paddingBottom="@dimen/movie_details_padding_large_padding">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/movie_title_text"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/movie_details_title_size"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@android:color/white"
-            android:paddingLeft="@dimen/movie_details_small_padding"
-            android:paddingRight="@dimen/movie_details_small_padding"
-            android:paddingTop="@dimen/movie_details_padding_large_padding"
-            android:paddingBottom="@dimen/movie_details_padding_large_padding"/>
+            android:background="@color/colorPrimaryDark">
 
-            <ImageView
+            <TextView
+                android:id="@+id/movie_title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@mipmap/star_outline"/>
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="@dimen/movie_details_padding_large_padding"
+                android:paddingLeft="@dimen/movie_details_small_padding"
+                android:paddingRight="@dimen/movie_details_small_padding"
+                android:paddingTop="@dimen/movie_details_padding_large_padding"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/movie_details_title_size" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/favorite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_star_icon_outline" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,18 +94,18 @@
             android:id="@+id/overview_heading_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/movie_details_field_heading_size"
-            android:textStyle="bold"
             android:paddingLeft="@dimen/movie_details_small_padding"
-            android:paddingRight="@dimen/movie_details_small_padding" />
+            android:paddingRight="@dimen/movie_details_small_padding"
+            android:textSize="@dimen/movie_details_field_heading_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/overview_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/movie_details_field_value_size"
             android:paddingLeft="@dimen/movie_details_small_padding"
-            android:paddingRight="@dimen/movie_details_small_padding" />
+            android:paddingRight="@dimen/movie_details_small_padding"
+            android:textSize="@dimen/movie_details_field_value_size" />
 
         <include layout="@layout/divider_line" />
 
@@ -111,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/movie_details_small_padding"/>
+            android:padding="@dimen/movie_details_small_padding" />
 
         <include layout="@layout/divider_line" />
 
@@ -120,7 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/movie_details_small_padding"/>
+            android:padding="@dimen/movie_details_small_padding" />
 
     </LinearLayout>
 

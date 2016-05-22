@@ -88,6 +88,15 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
             TextView overviewValue = (TextView) rootView.findViewById(R.id.overview_text);
             overviewValue.setText(mMovie.getOverview());
 
+            // Favorite Button
+            ImageView favoriteButton = (ImageView) rootView.findViewById(R.id.favorite_btn);
+            favoriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleFavoriteButtonTap();
+                }
+            });
+
             trailersLayout = (LinearLayout) rootView.findViewById(R.id.movie_trailers);
             // make the request for the trailers
             makeTrailersRequest();
@@ -150,5 +159,17 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
             View viewToAdd = reviewListAdapter.getView(i, null, null);
             reviewsLayout.addView(viewToAdd);
         }
+    }
+
+    private void handleFavoriteButtonTap() {
+        // call appropriate method here depending on weather movie is already stored or not
+    }
+
+    private void addToFavorites(Movie movie) {
+
+    }
+
+    private void removeFromFavorites(Movie movie) {
+
     }
 }
