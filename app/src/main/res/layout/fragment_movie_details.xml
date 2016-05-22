@@ -9,6 +9,12 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/movie_details_padding_large_padding" >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
         <TextView
             android:id="@+id/movie_title_text"
             android:layout_width="match_parent"
@@ -21,6 +27,14 @@
             android:paddingRight="@dimen/movie_details_small_padding"
             android:paddingTop="@dimen/movie_details_padding_large_padding"
             android:paddingBottom="@dimen/movie_details_padding_large_padding"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/star_outline"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
