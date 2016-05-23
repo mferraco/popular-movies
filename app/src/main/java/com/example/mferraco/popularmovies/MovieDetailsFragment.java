@@ -1,5 +1,9 @@
 package com.example.mferraco.popularmovies;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.mferraco.popularmovies.adapters.ReviewListAdapter;
 import com.example.mferraco.popularmovies.adapters.TrailerListAdapter;
+import com.example.mferraco.popularmovies.data.FavoriteMoviesContract;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetReviewsResponse;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetTrailersResponse;
 import com.example.mferraco.popularmovies.requestTasks.GetReviewsTask;
@@ -161,15 +166,109 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
         }
     }
 
+    /**
+     * Contains logic for handling the tap of the favorite movie button
+     *
+     * @return True if the db action was successful, false otherwise
+     */
     private void handleFavoriteButtonTap() {
-        // call appropriate method here depending on weather movie is already stored or not
+        // get data for this movie from query
+
+        boolean alreadyFavorited = false;
+
+        // check if the movie being favorited already exists in the DB
+        ContentResolver cr = getContext().getContentResolver();
+
+        Cursor cursor = cr.query(
+                FavoriteMoviesContract.FavoriteMoviesEntry.buildFavoriteMoviesUri(mMovie.getId()),
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor.getCount() > 0) {
+            alreadyFavorited = true;
+        }
+
+        boolean actionSuccessful;
+        if (alreadyFavorited) {
+            // delete from db
+            actionSuccessful = removeFromFavorites(mMovie);
+        } else {
+            // insert into db
+            actionSuccessful = addToFavorites(mMovie);
+        }
+
+        // only change the star icon if the action was successful
+        if (actionSuccessful) {
+
+        }
     }
 
-    private void addToFavorites(Movie movie) {
+    /**
+     * Adds a movie to the favorites table in the DB
+     *
+     * @param movie The movie to add to the favorites
+     * @return True if the movie was added successfully, false otherwise
+     */
+    private boolean addToFavorites(Movie movie) {
+        ContentResolver cr = getContext().getContentResolver();
 
+        ContentValues cvs = new ContentValues();
+
+        Uri newUri = cr.insert(FavoriteMoviesContract.FavoriteMoviesEntry.buildFavoriteMoviesUri(movie.getId()), getContentValuesForMovie(movie));
+
+        if (newUri != null) {
+            return true;
+        }
+
+        return false;
     }
 
-    private void removeFromFavorites(Movie movie) {
+    /**
+     * Removes a movies from the favorites table in the DB
+     *
+     * @param movie The movie to remove
+     * @return True if the movie was successfuly removes, false otherwise
+     */
+    private boolean removeFromFavorites(Movie movie) {
+        ContentResolver cr = getContext().getContentResolver();
 
+        int numDeleted = cr.delete(
+                FavoriteMoviesContract.FavoriteMoviesEntry.buildFavoriteMoviesUri(movie.getId()),
+                null,
+                null);
+
+        if (numDeleted > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates ContentValues for a movie
+     *
+     * @param movie The movie to create ContentValues for
+     * @return The ContentValues for the movie
+     */
+    private ContentValues getContentValuesForMovie(Movie movie) {
+        ContentValues movieValues = new ContentValues();
+
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry._ID, movie.getId());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.POSTER_PATH, movie.getPosterPath());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.ADULT, movie.isAdult());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.OVERVIEW, movie.getOverview());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.RELEASE_DATE, movie.getReleaseDate());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_TITLE, movie.getOriginalTitle());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_LANGUAGE, movie.getOriginalLanguage());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.TITLE, movie.getTitle());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.BACKDROP_PATH, movie.getBackdropPath());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.POPULARITY, movie.getPopularity());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_COUNT, movie.getVoteCount());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.VIDEO, movie.isVideo());
+        movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_AVERAGE, movie.getVoteAverage());
+
+        return movieValues;
     }
 }
