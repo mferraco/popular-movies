@@ -23,20 +23,20 @@ public class FavoriteMoviesDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_FAVORITE_MOVIES_TABLE =
-                "CREATE TABLE" + FavoriteMoviesContract.FavoriteMoviesEntry.TABLE_FAVORITE_MOVIES
+                "CREATE TABLE " + FavoriteMoviesContract.FavoriteMoviesEntry.TABLE_FAVORITE_MOVIES
                         + "(" + FavoriteMoviesContract.FavoriteMoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.POSTER_PATH + "TEXT NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.ADULT + "BOOL NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.OVERVIEW + "TEXT NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.RELEASE_DATE + "TEXT  NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_TITLE + "TEXT NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_LANGUAGE + "TEXT NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.TITLE + "TEXT NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.BACKDROP_PATH + "TEXT NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.POPULARITY + "REAL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_COUNT + "INTEGER"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.VIDEO + "BOOL NOT NULL"
-                        + FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_AVERAGE + "REAL);";
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.POSTER_PATH + " TEXT NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.ADULT + " BOOL NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.OVERVIEW + " TEXT NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.RELEASE_DATE + " TEXT  NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_TITLE + " TEXT NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_LANGUAGE + " TEXT NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.TITLE + " TEXT NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.BACKDROP_PATH + " TEXT NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.POPULARITY + " REAL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_COUNT + " INTEGER, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.VIDEO + " BOOL NOT NULL, "
+                        + FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_AVERAGE + " REAL);";
 
         db.execSQL(SQL_CREATE_FAVORITE_MOVIES_TABLE);
     }

@@ -28,7 +28,7 @@ public class FavoriteMoviesContract {
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
         public static final String ORIGINAL_TITLE = "original_title";
-        public static final String ORIGINAL_LANGUAGE = "original_;anguage";
+        public static final String ORIGINAL_LANGUAGE = "original_language";
         public static final String TITLE = "title";
         public static final String BACKDROP_PATH = "backdrop_path";
         public static final String POPULARITY = "popularity";

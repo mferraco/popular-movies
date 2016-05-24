@@ -30,6 +30,12 @@
         <activity android:name=".ReviewDetailsActivity"
             android:label="@string/title_review_details" >
         </activity>
+
+        <provider
+            android:authorities="com.example.mferraco.popularmovies"
+            android:name=".data.FavoriteMoviesProvider" >
+        </provider>
+
     </application>
 
 </manifest>

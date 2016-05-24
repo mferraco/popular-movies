@@ -47,6 +47,7 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
     private ImageView thumbnail;
     private LinearLayout trailersLayout;
     private LinearLayout reviewsLayout;
+    private ImageView favoriteButton;
 
     public static MovieDetailsFragment newInstance(Bundle args) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -94,7 +95,13 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
             overviewValue.setText(mMovie.getOverview());
 
             // Favorite Button
-            ImageView favoriteButton = (ImageView) rootView.findViewById(R.id.favorite_btn);
+            favoriteButton = (ImageView) rootView.findViewById(R.id.favorite_btn);
+            if (isAlreadyFavorited(mMovie)) {
+                favoriteButton.setImageResource(R.drawable.ic_star_icon_filled);
+            } else {
+                favoriteButton.setImageResource(R.drawable.ic_star_icon_outline);
+            }
+
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -172,36 +179,18 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
      * @return True if the db action was successful, false otherwise
      */
     private void handleFavoriteButtonTap() {
-        // get data for this movie from query
+        boolean alreadyFavorited = isAlreadyFavorited(mMovie);
 
-        boolean alreadyFavorited = false;
-
-        // check if the movie being favorited already exists in the DB
-        ContentResolver cr = getContext().getContentResolver();
-
-        Cursor cursor = cr.query(
-                FavoriteMoviesContract.FavoriteMoviesEntry.buildFavoriteMoviesUri(mMovie.getId()),
-                null,
-                null,
-                null,
-                null);
-
-        if (cursor.getCount() > 0) {
-            alreadyFavorited = true;
-        }
-
-        boolean actionSuccessful;
         if (alreadyFavorited) {
             // delete from db
-            actionSuccessful = removeFromFavorites(mMovie);
+            if (removeFromFavorites(mMovie)) {
+                favoriteButton.setImageResource(R.drawable.ic_star_icon_outline);
+            }
         } else {
             // insert into db
-            actionSuccessful = addToFavorites(mMovie);
-        }
-
-        // only change the star icon if the action was successful
-        if (actionSuccessful) {
-
+            if (addToFavorites(mMovie)) {
+                favoriteButton.setImageResource(R.drawable.ic_star_icon_filled);
+            }
         }
     }
 
@@ -270,5 +259,29 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
         movieValues.put(FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_AVERAGE, movie.getVoteAverage());
 
         return movieValues;
+    }
+
+    /**
+     * Determines whether the movie is previously favorites
+     *
+     * @param movie The movie to check if favorited
+     * @return True if the movie is favorited already, false otherwise
+     */
+    private boolean isAlreadyFavorited(Movie movie) {
+        ContentResolver cr = getContext().getContentResolver();
+
+        Cursor cursor = cr.query(
+                FavoriteMoviesContract.FavoriteMoviesEntry.buildFavoriteMoviesUri(mMovie.getId()),
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        }
+
+        return false;
     }
 }
