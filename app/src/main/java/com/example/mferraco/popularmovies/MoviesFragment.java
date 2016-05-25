@@ -2,6 +2,7 @@ package com.example.mferraco.popularmovies;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -11,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mferraco.popularmovies.adapters.ImageAdapter;
+import com.example.mferraco.popularmovies.data.FavoriteMoviesContract;
 import com.example.mferraco.popularmovies.interfaces.DetailsCallback;
 import com.example.mferraco.popularmovies.requestTasks.AsyncGetMoviesResponse;
 import com.example.mferraco.popularmovies.requestTasks.GetMoviesTask;
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 /**
  * This fragment will control the grid view of movies.
  */
-public class    MoviesFragment extends android.support.v4.app.Fragment implements AsyncGetMoviesResponse {
+public class MoviesFragment extends android.support.v4.app.Fragment implements AsyncGetMoviesResponse {
 
     private static final String TAG = MoviesFragment.class.getSimpleName();
 
@@ -36,6 +39,7 @@ public class    MoviesFragment extends android.support.v4.app.Fragment implement
     private static final String MOVIES_KEY = "mMovies";
 
     private GridView mImageGridView;
+    private TextView mNoFavoritesTextView;
 
     private String mCurrentSortOrder;
 
@@ -73,6 +77,7 @@ public class    MoviesFragment extends android.support.v4.app.Fragment implement
             mCurrentSortOrder = getString(R.string.settings_sort_order_default);
         }
 
+        mNoFavoritesTextView = (TextView) rootView.findViewById(R.id.no_movies_favorited_textview);
         mImageGridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -99,16 +104,43 @@ public class    MoviesFragment extends android.support.v4.app.Fragment implement
             mFirstRequest = false;
             mCurrentSortOrder = sortOrderPreference;
 
-            if (AppUtils.isOnline(getContext())) {
-                GetMoviesTask getMoviesTask = new GetMoviesTask(getContext());
-                getMoviesTask.delegate = this;
-                Log.d(TAG, "EXECUTING API REQUEST");
-                getMoviesTask.execute(mCurrentSortOrder);
+
+            if (mCurrentSortOrder.equalsIgnoreCase(getString(R.string.settings_sort_order_favorite))) {
+                // if the favorite sort order is selected it doesn't matter if they have
+                Cursor cursor = getContext().getContentResolver().query(
+                        FavoriteMoviesContract.FavoriteMoviesEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null);
+                ArrayList<Movie> movies = getMoviesFromCursor(cursor);
+                setNoFavoritesTextVisibility(movies);
+                processMovieResponse(movies);
             } else {
-                Toast.makeText(getContext(), getString(R.string.no_network_dialog_title), Toast.LENGTH_LONG).show();
+                // if any other sort order is selected we need to make an API call so check network
+                if (AppUtils.isOnline(getContext())) {
+                    GetMoviesTask getMoviesTask = new GetMoviesTask(getContext());
+                    getMoviesTask.delegate = this;
+                    Log.d(TAG, "EXECUTING API REQUEST");
+                    getMoviesTask.execute(mCurrentSortOrder);
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.no_network_dialog_title), Toast.LENGTH_LONG).show();
+                }
             }
         } else {
             if (mMovies != null) {
+                if (mCurrentSortOrder.equalsIgnoreCase(getString(R.string.settings_sort_order_favorite))) {
+                    // if the favorite sort order is selected it doesn't matter if they have
+                    Cursor cursor = getContext().getContentResolver().query(
+                            FavoriteMoviesContract.FavoriteMoviesEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+                    ArrayList<Movie> movies = getMoviesFromCursor(cursor);
+                    setNoFavoritesTextVisibility(movies);
+                    mMovies = movies;
+                }
                 processMovieResponse(mMovies);
             }
         }
@@ -136,5 +168,26 @@ public class    MoviesFragment extends android.support.v4.app.Fragment implement
         outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
         outState.putBoolean(FIRST_REQUEST_KEY, mFirstRequest);
         outState.putParcelableArrayList(MOVIES_KEY, mMovies);
+    }
+
+    private ArrayList<Movie> getMoviesFromCursor(Cursor cursor) {
+        ArrayList<Movie> movies = new ArrayList<>();
+
+        if (cursor != null && cursor.getCount() > 0) {
+            while(cursor.moveToNext()) {
+                Movie movie = new Movie(cursor);
+                movies.add(movie);
+            }
+        }
+
+        return movies;
+    }
+
+    private void setNoFavoritesTextVisibility(ArrayList<Movie> movies) {
+        if (movies == null || movies.size() == 0) {
+            mNoFavoritesTextView.setVisibility(View.VISIBLE);
+        } else {
+            mNoFavoritesTextView.setVisibility(View.GONE);
+        }
     }
 }

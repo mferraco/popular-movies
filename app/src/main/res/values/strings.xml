@@ -9,7 +9,10 @@
     <!-- Dialogs -->
     <string name="no_network_dialog_title">No network connection!</string>
 
-    <!-- Movie Details Activity -->
+    <!-- Movie Grid -->
+    <string name="no_movies_favorited">No Movies Favorited.</string>
+
+    <!-- Movie Details -->
 
     <string-array name="movie_details_fields_title">
         <item>Release Date</item>
@@ -25,15 +28,19 @@
     <string name="settings_sort_order_title">Sort Order</string>
     <string name="settings_sort_order_key">sort_order</string>
     <string name="settings_sort_order_default">popular</string>
+    <string name="settings_sort_order_top_rated">top_rated</string>
+    <string name="settings_sort_order_favorite">favorite</string>
 
     <string-array name="settings_sort_order_titles">
         <item>Popularity</item>
         <item>Rating</item>
+        <item>Favorite</item>
     </string-array>
 
     <string-array name="settings_sort_order_values">
-        <item>popular</item>
-        <item>top_rated</item>
+        <item>@string/settings_sort_order_default</item>
+        <item>@string/settings_sort_order_top_rated</item>
+        <item>@string/settings_sort_order_favorite</item>
     </string-array>
 
     <!-- Image Constants -->

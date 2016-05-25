@@ -4,6 +4,17 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
+    <TextView
+        android:id="@+id/no_movies_favorited_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textSize="@dimen/movie_grid_no_favorites"
+        android:textColor="@android:color/white"
+        android:text="@string/no_movies_favorited"
+        android:visibility="gone"/>
+
     <GridView
         android:id="@+id/movie_grid_view"
         android:layout_width="match_parent"

@@ -1,8 +1,11 @@
 package com.example.mferraco.popularmovies.responseModels;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+
+import com.example.mferraco.popularmovies.data.FavoriteMoviesContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +37,23 @@ public class Movie implements Parcelable {
 
     public Movie() {
         // No-op
+    }
+
+    public Movie(Cursor cursor) {
+        posterPath = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.POSTER_PATH));
+        adult = (cursor.getInt(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.ADULT)) != 0);
+        overview = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.OVERVIEW));
+        releaseDate = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.RELEASE_DATE));
+        genreIds = new ArrayList<>(); // currently not storing genreIds in the DB
+        id = cursor.getInt(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry._ID));
+        originalTitle = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_TITLE));
+        originalLanguage = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.ORIGINAL_LANGUAGE));
+        title = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.TITLE));
+        backdropPath = cursor.getString(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.BACKDROP_PATH));
+        popularity = cursor.getDouble(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.POPULARITY));
+        voteCount = cursor.getInt(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_COUNT));
+        video = (cursor.getInt(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.VIDEO)) != 0);
+        voteAverage = cursor.getDouble(cursor.getColumnIndex(FavoriteMoviesContract.FavoriteMoviesEntry.VOTE_AVERAGE));
     }
 
     public static Movie fromJson(JSONObject movieDataJson) {

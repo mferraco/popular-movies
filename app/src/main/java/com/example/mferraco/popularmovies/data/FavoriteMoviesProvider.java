@@ -22,12 +22,14 @@ public class FavoriteMoviesProvider extends ContentProvider {
 
     /* Codes for the URI Matcher */
     private static final int FAVORITE_MOVIE = 100;
+    private static final int ALL_FAVORITE_MOVIES = 200;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = FavoriteMoviesContract.CONTENT_AUTHORITY;
 
-        // add a code for each type of URI, we only have one
+        // add a code for each type of URI
+        matcher.addURI(authority, FavoriteMoviesContract.FavoriteMoviesEntry.TABLE_FAVORITE_MOVIES + "/", ALL_FAVORITE_MOVIES);
         matcher.addURI(authority, FavoriteMoviesContract.FavoriteMoviesEntry.TABLE_FAVORITE_MOVIES + "/#", FAVORITE_MOVIE);
 
         return matcher;
@@ -48,6 +50,16 @@ public class FavoriteMoviesProvider extends ContentProvider {
         Cursor cursor;
 
         switch (match) {
+            case ALL_FAVORITE_MOVIES:
+                cursor = helper.getReadableDatabase().query(
+                        FavoriteMoviesContract.FavoriteMoviesEntry.TABLE_FAVORITE_MOVIES,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                return cursor;
             case FAVORITE_MOVIE:
                 cursor = helper.getReadableDatabase().query(
                         FavoriteMoviesContract.FavoriteMoviesEntry.TABLE_FAVORITE_MOVIES,
@@ -71,6 +83,8 @@ public class FavoriteMoviesProvider extends ContentProvider {
         final int match = uriMathcher.match(uri);
 
         switch (match) {
+            case ALL_FAVORITE_MOVIES:
+                return FavoriteMoviesContract.FavoriteMoviesEntry.CONTENT_DIR_TYPE;
             case FAVORITE_MOVIE:
                 return FavoriteMoviesContract.FavoriteMoviesEntry.CONTENT_ITEM_TYPE;
             default:

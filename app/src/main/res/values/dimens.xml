@@ -7,6 +7,7 @@
     <!-- Grid View -->
     <dimen name="movie_grid_view_column_width">50dp</dimen>
     <dimen name="movie_grid_view_spacing">5dp</dimen>
+    <dimen name="movie_grid_no_favorites">20sp</dimen>
 
     <!-- Movie Details View -->
     <dimen name="movie_details_small_padding">15dp</dimen>
