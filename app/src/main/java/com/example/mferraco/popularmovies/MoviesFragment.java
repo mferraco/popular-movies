@@ -150,6 +150,13 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
+        outState.putBoolean(FIRST_REQUEST_KEY, mFirstRequest);
+        outState.putParcelableArrayList(MOVIES_KEY, mMovies);
+    }
+
     /* AsyncGetMoviesResponse Interface */
 
     @Override
@@ -169,13 +176,11 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
         });
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
-        outState.putBoolean(FIRST_REQUEST_KEY, mFirstRequest);
-        outState.putParcelableArrayList(MOVIES_KEY, mMovies);
-    }
-
+    /**
+     * Creates an ArrayList of Movies from a cursor
+     * @param cursor The cursor referencing the movies in the SQLite DB
+     * @return The ArrayList of movies
+     */
     private ArrayList<Movie> getMoviesFromCursor(Cursor cursor) {
         ArrayList<Movie> movies = new ArrayList<>();
 
@@ -189,6 +194,10 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
         return movies;
     }
 
+    /**
+     * Determines whether to show the text "No Movies Favorited" or not
+     * @param movies The list of movies
+     */
     private void setNoFavoritesTextVisibility(ArrayList<Movie> movies) {
         if (movies == null || movies.size() == 0) {
             mNoFavoritesTextView.setVisibility(View.VISIBLE);
@@ -197,6 +206,10 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
         }
     }
 
+    /**
+     * Determines whether or not to show the progress bar
+     * @param shouldShow True if the progress bar should be shown, false if not
+     */
     private void shouldShowProgressBar(boolean shouldShow) {
         if (shouldShow) {
             moviesProgressBar.setVisibility(View.VISIBLE);

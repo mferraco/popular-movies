@@ -1,11 +1,14 @@
 package com.example.mferraco.popularmovies.responseModels;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
 /**
  * This object represents a trailer json object in the response from TheMovieDB API.
  */
-public class Trailer {
+public class Trailer implements Parcelable {
 
     private static final String TAG = Trailer.class.getSimpleName();
 
@@ -100,4 +103,46 @@ public class Trailer {
     public void setType(String type) {
         this.type = type;
     }
+
+    /* Parcelable Interface */
+
+    public Trailer(Parcel in) {
+        this.id = in.readString();
+        this.iso_639_1 = in.readString();
+        this.iso_3166_1 = in.readString();
+        this.key = in.readString();
+        this.name = in.readString();
+        this.site = in.readString();
+        this.size = in.readInt();
+        this.type = in.readString();
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(iso_639_1);
+        dest.writeString(iso_3166_1);
+        dest.writeString(key);
+        dest.writeString(name);
+        dest.writeString(site);
+        dest.writeInt(size);
+        dest.writeString(type);
+    }
+
+    public static final Parcelable.Creator<Trailer> CREATOR = new Parcelable.Creator<Trailer>() {
+
+        public Trailer createFromParcel(Parcel in) {
+            return new Trailer(in);
+        }
+
+        public Trailer[] newArray(int size) {
+            return new Trailer[size];
+        }
+    };
 }

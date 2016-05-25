@@ -20,6 +20,8 @@
         <item>Overview</item>
     </string-array>
 
+    <string name="movie_details_vote_format">%1$s/10</string>
+
     <!-- Menu Item Titles -->
     <string name="action_settings">Settings</string>
 

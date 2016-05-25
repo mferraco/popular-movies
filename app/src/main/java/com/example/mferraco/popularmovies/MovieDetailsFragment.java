@@ -30,7 +30,10 @@ import com.example.mferraco.popularmovies.responseModels.Trailer;
 import com.example.mferraco.popularmovies.utils.AppUtils;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * This Fragment displays the details for a particular movie.  These details could be on their
@@ -41,7 +44,14 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
 
     private static final String TAG = MovieDetailsFragment.class.getSimpleName();
 
+    private static final String MOVIE = "movie";
+    private static final String TRAILERS = "trailers";
+    private static final String REVIEWS = "reviews";
+
     private Movie mMovie;
+
+    private ArrayList<Trailer> mTrailers;
+    private ArrayList<Review> mReviews;
 
     // UI Elements
     private TextView title;
@@ -62,6 +72,12 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+
+        if (savedInstanceState != null) {
+            mMovie = savedInstanceState.getParcelable(MOVIE);
+            mTrailers = savedInstanceState.getParcelableArrayList(TRAILERS);
+            mReviews = savedInstanceState.getParcelableArrayList(REVIEWS);
+        }
 
         Bundle args = getArguments();
         if (args != null) {
@@ -86,13 +102,20 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
             TextView releaseDateHeading = (TextView) rootView.findViewById(R.id.release_date_heading_text);
             releaseDateHeading.setText(fieldTitles[0]);
             TextView releaseDateValue = (TextView) rootView.findViewById(R.id.release_date_text);
-            releaseDateValue.setText(mMovie.getReleaseDate());
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM. yyyy", Locale.US);
+            try {
+                releaseDateValue.setText(formatter.parse(mMovie.getReleaseDate()).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Could not parse date.");
+            }
+
 
             // Vote Average
             TextView voteAverageHeading = (TextView) rootView.findViewById(R.id.vote_average_heading_text);
             voteAverageHeading.setText(fieldTitles[1]);
             TextView voteAverageValue = (TextView) rootView.findViewById(R.id.vote_average_text);
-            voteAverageValue.setText(String.valueOf(mMovie.getVoteAverage()));
+            voteAverageValue.setText(String.format(getString(R.string.movie_details_vote_format), String.valueOf(mMovie.getVoteAverage())));
 
             // Plot Synopsis (overview)
             TextView overviewHeading = (TextView) rootView.findViewById(R.id.overview_heading_text);
@@ -117,14 +140,31 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
 
             trailersLayout = (LinearLayout) rootView.findViewById(R.id.movie_trailers);
             // make the request for the trailers
-            makeTrailersRequest();
+            if (mTrailers == null) {
+                makeTrailersRequest();
+            } else {
+                processTrailersResponse(mTrailers);
+            }
 
             reviewsLayout = (LinearLayout) rootView.findViewById(R.id.movie_reviews);
             // make the request for the reviews
-            makeReviewsRequest();
+            if (mReviews == null) {
+                makeReviewsRequest();
+            } else {
+                processReviewsResponse(mReviews);
+            }
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(MOVIE, mMovie);
+        outState.putParcelableArrayList(TRAILERS, mTrailers);
+        outState.putParcelableArrayList(REVIEWS, mReviews);
     }
 
     /**
@@ -165,6 +205,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
     public void processTrailersResponse(ArrayList<Trailer> trailers) {
         shouldShowTrailersProgressBar(false);
 
+        mTrailers = trailers;
+
         TrailerListAdapter trailerListAdapter = new TrailerListAdapter(getContext(), trailers);
 
         // add the views from the adapter to the LinearLayout
@@ -177,6 +219,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
     @Override
     public void processReviewsResponse(ArrayList<Review> reviews) {
         shouldShowReviewsProgressBar(false);
+
+        mReviews = reviews;
 
         ReviewListAdapter reviewListAdapter = new ReviewListAdapter(getContext(), reviews);
 
@@ -299,6 +343,10 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
         return false;
     }
 
+    /**
+     * Shows or hides the progress bar for the trailers request
+     * @param shouldShow Boolean which determines whether to show or hide the progress bas
+     */
     private void shouldShowTrailersProgressBar(boolean shouldShow) {
         if (shouldShow) {
             trailersProgressBar.setVisibility(View.VISIBLE);
@@ -309,6 +357,10 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
         }
     }
 
+    /**
+     * Shows or hides the progress bar for the reviews request
+     * @param shouldShow Boolean which determines whether to show or hide the progress bas
+     */
     private void shouldShowReviewsProgressBar(boolean shouldShow) {
         if (shouldShow) {
             reviewsProgressBar.setVisibility(View.VISIBLE);
