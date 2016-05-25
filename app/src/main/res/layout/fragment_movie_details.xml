@@ -21,7 +21,7 @@
                 android:layout_centerHorizontal="true"
                 android:paddingBottom="@dimen/movie_details_padding_large_padding"
                 android:paddingLeft="@dimen/movie_details_small_padding"
-                android:paddingRight="80dp"
+                android:paddingRight="@dimen/movie_details_title_right_padding"
                 android:paddingTop="@dimen/movie_details_padding_large_padding"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/movie_details_title_size" />

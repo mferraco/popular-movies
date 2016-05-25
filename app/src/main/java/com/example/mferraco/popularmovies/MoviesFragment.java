@@ -38,6 +38,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
     private static final String CURRENT_SORT_ORDER_KEY = "mCurrentSortOrder";
     private static final String FIRST_REQUEST_KEY = "mFirstRequest";
     private static final String MOVIES_KEY = "mMovies";
+    private static final String SELECTED_MOVIE = "mSelectedMovie";
 
     private GridView mImageGridView;
     private TextView mNoFavoritesTextView;
@@ -50,6 +51,8 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
     private ArrayList<Movie> mMovies;
 
     private boolean isTabletLayout;
+
+    private Movie mSelectedMovie;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -75,6 +78,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
             mCurrentSortOrder = savedInstanceState.getString(CURRENT_SORT_ORDER_KEY, getString(R.string.settings_sort_order_default));
             mFirstRequest = savedInstanceState.getBoolean(FIRST_REQUEST_KEY, true);
             mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+            mSelectedMovie = savedInstanceState.getParcelable(SELECTED_MOVIE);
         } else {
             mCurrentSortOrder = getString(R.string.settings_sort_order_default);
         }
@@ -155,6 +159,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
         outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
         outState.putBoolean(FIRST_REQUEST_KEY, mFirstRequest);
         outState.putParcelableArrayList(MOVIES_KEY, mMovies);
+        outState.putParcelable(SELECTED_MOVIE, mSelectedMovie);
     }
 
     /* AsyncGetMoviesResponse Interface */
@@ -172,8 +177,17 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((DetailsCallback) getActivity()).onItemSelected(mMovies.get(position));
+                mSelectedMovie = mMovies.get(position);
             }
         });
+
+        if (isTabletLayout && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (mSelectedMovie != null) {
+                ((DetailsCallback) getActivity()).onItemSelected(mSelectedMovie);
+            } else {
+                ((DetailsCallback) getActivity()).onItemSelected(mMovies.get(0));
+            }
+        }
     }
 
     /**

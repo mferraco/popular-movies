@@ -23,6 +23,10 @@ public class MoviesActivity extends AppCompatActivity implements DetailsCallback
 
     private boolean isTabletLayout;
 
+    private boolean isOnReviewDetails;
+
+    private Movie mSelectedMovie;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,8 @@ public class MoviesActivity extends AppCompatActivity implements DetailsCallback
 
     @Override
     public void onItemSelected(Movie movie) {
+        mSelectedMovie = movie;
+
         if (isTabletLayout) {
             // load the movie data into the fragment on this screen
             Bundle args = new Bundle();
@@ -89,6 +95,8 @@ public class MoviesActivity extends AppCompatActivity implements DetailsCallback
     @Override
     public void onItemSelected(Review review) {
         if (isTabletLayout) {
+            isOnReviewDetails = true;
+
             Bundle args = new Bundle();
             args.putParcelable(ReviewDetailsFragment.REVIEW_OBJECT_KEY, review);
 
@@ -97,6 +105,28 @@ public class MoviesActivity extends AppCompatActivity implements DetailsCallback
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment)
                     .commit();
+        }
+    }
+
+    /**
+     * Override on back pressed to handle back press when fragment needs replaced in tablet mode
+     */
+    @Override
+    public void onBackPressed() {
+        if (isOnReviewDetails) {
+            isOnReviewDetails = false;
+
+            // load the movie data into the fragment on this screen
+            Bundle args = new Bundle();
+            args.putParcelable(MOVIE_OBJECT_KEY, mSelectedMovie);
+
+            MovieDetailsFragment fragment = MovieDetailsFragment.newInstance(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
+        } else {
+            super.onBackPressed();
         }
     }
 }
