@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
 
     private GridView mImageGridView;
     private TextView mNoFavoritesTextView;
+    private ProgressBar moviesProgressBar;
 
     private String mCurrentSortOrder;
 
@@ -77,6 +79,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
             mCurrentSortOrder = getString(R.string.settings_sort_order_default);
         }
 
+        moviesProgressBar = (ProgressBar) rootView.findViewById(R.id.movies_progress_bar);
         mNoFavoritesTextView = (TextView) rootView.findViewById(R.id.no_movies_favorited_textview);
         mImageGridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
@@ -119,6 +122,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
             } else {
                 // if any other sort order is selected we need to make an API call so check network
                 if (AppUtils.isOnline(getContext())) {
+                    shouldShowProgressBar(true);
                     GetMoviesTask getMoviesTask = new GetMoviesTask(getContext());
                     getMoviesTask.delegate = this;
                     Log.d(TAG, "EXECUTING API REQUEST");
@@ -150,6 +154,8 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
 
     @Override
     public void processMovieResponse(ArrayList<Movie> movies) {
+        shouldShowProgressBar(false);
+
         mMovies = movies;
 
         // set up image adapter here
@@ -174,7 +180,7 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
         ArrayList<Movie> movies = new ArrayList<>();
 
         if (cursor != null && cursor.getCount() > 0) {
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 Movie movie = new Movie(cursor);
                 movies.add(movie);
             }
@@ -188,6 +194,17 @@ public class MoviesFragment extends android.support.v4.app.Fragment implements A
             mNoFavoritesTextView.setVisibility(View.VISIBLE);
         } else {
             mNoFavoritesTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void shouldShowProgressBar(boolean shouldShow) {
+        if (shouldShow) {
+            moviesProgressBar.setVisibility(View.VISIBLE);
+            mImageGridView.setVisibility(View.GONE);
+        } else {
+            moviesProgressBar.setVisibility(View.GONE);
+            mImageGridView.setVisibility(View.VISIBLE);
+
         }
     }
 }

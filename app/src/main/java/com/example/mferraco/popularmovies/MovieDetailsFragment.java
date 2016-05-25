@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
     private LinearLayout trailersLayout;
     private LinearLayout reviewsLayout;
     private ImageView favoriteButton;
+    private ProgressBar trailersProgressBar;
+    private ProgressBar reviewsProgressBar;
 
     public static MovieDetailsFragment newInstance(Bundle args) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -62,6 +65,9 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
 
         Bundle args = getArguments();
         if (args != null) {
+            trailersProgressBar = (ProgressBar) rootView.findViewById(R.id.trailers_progress_bar);
+            reviewsProgressBar = (ProgressBar) rootView.findViewById(R.id.reviews_progress_bar);
+
             mMovie = args.getParcelable(MoviesActivity.MOVIE_OBJECT_KEY);
 
             title = (TextView) rootView.findViewById(R.id.movie_title_text);
@@ -127,6 +133,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
      */
     private void makeTrailersRequest() {
         if (AppUtils.isOnline(getContext())) {
+            shouldShowTrailersProgressBar(true);
+
             GetTrailersTask getTrailersTask = new GetTrailersTask(getContext());
             getTrailersTask.delegate = this;
             Log.d(TAG, "EXECUTING TRAILERS API REQUEST");
@@ -142,6 +150,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
      */
     private void makeReviewsRequest() {
         if (AppUtils.isOnline(getContext())) {
+            shouldShowReviewsProgressBar(true);
+
             GetReviewsTask getReviewsTask = new GetReviewsTask(getContext());
             getReviewsTask.delegate = this;
             Log.d(TAG, "EXECUTING REVIEWS API REQUEST");
@@ -153,6 +163,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
 
     @Override
     public void processTrailersResponse(ArrayList<Trailer> trailers) {
+        shouldShowTrailersProgressBar(false);
+
         TrailerListAdapter trailerListAdapter = new TrailerListAdapter(getContext(), trailers);
 
         // add the views from the adapter to the LinearLayout
@@ -164,6 +176,8 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
 
     @Override
     public void processReviewsResponse(ArrayList<Review> reviews) {
+        shouldShowReviewsProgressBar(false);
+
         ReviewListAdapter reviewListAdapter = new ReviewListAdapter(getContext(), reviews);
 
         // add the views from the adapter to the LinearLayout
@@ -284,4 +298,25 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
 
         return false;
     }
+
+    private void shouldShowTrailersProgressBar(boolean shouldShow) {
+        if (shouldShow) {
+            trailersProgressBar.setVisibility(View.VISIBLE);
+            trailersLayout.setVisibility(View.GONE);
+        } else {
+            trailersProgressBar.setVisibility(View.GONE);
+            trailersLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void shouldShowReviewsProgressBar(boolean shouldShow) {
+        if (shouldShow) {
+            reviewsProgressBar.setVisibility(View.VISIBLE);
+            reviewsLayout.setVisibility(View.GONE);
+        } else {
+            reviewsProgressBar.setVisibility(View.GONE);
+            reviewsLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

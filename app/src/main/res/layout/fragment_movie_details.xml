@@ -109,6 +109,14 @@
 
         <include layout="@layout/divider_line" />
 
+        <ProgressBar
+            android:id="@+id/trailers_progress_bar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
         <LinearLayout
             android:id="@+id/movie_trailers"
             android:layout_width="match_parent"
@@ -117,6 +125,14 @@
             android:padding="@dimen/movie_details_small_padding" />
 
         <include layout="@layout/divider_line" />
+
+        <ProgressBar
+            android:id="@+id/reviews_progress_bar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/movie_reviews"
