@@ -102,9 +102,12 @@ public class MovieDetailsFragment extends Fragment implements AsyncGetTrailersRe
             TextView releaseDateHeading = (TextView) rootView.findViewById(R.id.release_date_heading_text);
             releaseDateHeading.setText(fieldTitles[0]);
             TextView releaseDateValue = (TextView) rootView.findViewById(R.id.release_date_text);
-            SimpleDateFormat formatter = new SimpleDateFormat("MMM. yyyy", Locale.US);
+            SimpleDateFormat stringToDateFormatter = new SimpleDateFormat("yyyy-MM-d", Locale.US);
+            SimpleDateFormat dateToStringFormatter = new SimpleDateFormat("MMM. yyyy", Locale.US);
             try {
-                releaseDateValue.setText(formatter.parse(mMovie.getReleaseDate()).toString());
+
+                String releaseDate = dateToStringFormatter.format(stringToDateFormatter.parse(mMovie.getReleaseDate()));
+                releaseDateValue.setText(releaseDate);
             } catch (ParseException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Could not parse date.");
